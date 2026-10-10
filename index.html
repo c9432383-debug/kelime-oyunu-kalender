@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Minik Okur - Eğlenceli Öğrenme</title>
+    <title>Minik Okur - Görselli ve Eğitici Oyun</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Havai Fişek Canvas Alanı -->
     <canvas id="fireworksCanvas"></canvas>
 
     <div class="app-container">
@@ -22,16 +21,24 @@
                     <span class="label">Doğru</span>
                     <span id="solvedCount">0</span>
                 </div>
+                <div class="stat-box">
+                    <span class="label">Yanlış</span>
+                    <span id="wrongCount">0</span>
+                </div>
             </div>
         </header>
 
         <main>
             <div class="question-card">
+                <div class="image-wrapper" id="imageWrapper">
+                    <!-- Kelimeye ait görsel/emoji buraya gelecek -->
+                    <span id="targetImage">🌷</span>
+                </div>
                 <span class="clue-title">Bunu Oluştur:</span>
-                <p id="targetWordText">EL</p>
+                <p id="targetWordText">LALE</p>
             </div>
 
-            <div class="word-display" id="wordDisplay">_ _</div>
+            <div class="word-display" id="wordDisplay">_ _ _ _</div>
             
             <div class="letters-container" id="lettersContainer">
                 <!-- Harf butonları -->
@@ -40,6 +47,10 @@
             <div class="controls">
                 <button class="btn btn-secondary" onclick="clearInput()">Sil 🧹</button>
                 <button class="btn btn-primary" onclick="submitWord()">Kontrol Et ✨</button>
+            </div>
+            
+            <div style="text-align: center; margin-top: 10px;">
+                <button class="btn-reset" onclick="resetStats()">Puanları Sıfırla 🔄</button>
             </div>
         </main>
 
