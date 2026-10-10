@@ -3,49 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Kelime Ustası - Sınırsız Mod</title>
+    <title>Minik Okur - Eğlenceli Öğrenme</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="app-container">
         <header>
-            <div class="game-brand">SINIRSIZ KELİME USTASI</div>
+            <h1>🌟 MİNİK OKUR 🌟</h1>
             <div class="stats-board">
-                <div class="stat-box">
-                    <span class="label">Çözülen</span>
-                    <span id="solvedCount">0</span>
-                </div>
                 <div class="stat-box">
                     <span class="label">Puan</span>
                     <span id="score">0</span>
                 </div>
                 <div class="stat-box">
-                    <span class="label">Süre</span>
-                    <span id="timer">20s</span>
+                    <span class="label">Doğru</span>
+                    <span id="solvedCount">0</span>
                 </div>
             </div>
         </header>
 
         <main>
-            <div class="clue-card">
-                <span class="clue-tag">İPUCU</span>
-                <p id="clueText">Oyun yükleniyor...</p>
+            <div class="question-card">
+                <span class="clue-title">Bunu Oluştur:</span>
+                <p id="targetWordText">EL</p>
             </div>
 
-            <div class="word-display" id="wordDisplay">_ _ _ _</div>
+            <div class="word-display" id="wordDisplay">_ _</div>
             
             <div class="letters-container" id="lettersContainer">
-                <!-- Harfler buraya gelecektir -->
-            </div>
-
-            <div class="jokers-bar">
-                <button class="btn-joker" onclick="useHint()">💡 Harf Al (-10P)</button>
-                <button class="btn-joker" onclick="shuffleLetters()">🔀 Karıştır</button>
+                <!-- Çocuk dostu büyük harf butonları -->
             </div>
 
             <div class="controls">
-                <button class="btn btn-secondary" onclick="clearInput()">Sil</button>
-                <button class="btn btn-primary" onclick="submitWord()">Cevapla</button>
+                <button class="btn btn-secondary" onclick="clearInput()">Sil 🧹</button>
+                <button class="btn btn-primary" onclick="submitWord()">Kontrol Et ✨</button>
             </div>
         </main>
 
