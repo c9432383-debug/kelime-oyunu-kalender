@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Kelime Avcısı Pro</title>
+    <title>Kelime Ustası - Pro</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="app-container">
         <header>
-            <h1>KELİME AVCISI</h1>
+            <div class="game-brand">KELİME USTASI</div>
             <div class="stats-board">
                 <div class="stat-box">
-                    <span class="label">Seviye</span>
-                    <span id="level">1</span>
+                    <span class="label">Soru</span>
+                    <span id="questionNum">1/5</span>
                 </div>
                 <div class="stat-box">
                     <span class="label">Puan</span>
@@ -21,25 +21,31 @@
                 </div>
                 <div class="stat-box">
                     <span class="label">Süre</span>
-                    <span id="timer">60</span>s
+                    <span id="timer" class="timer-active">20</span>s
                 </div>
             </div>
         </header>
 
         <main>
+            <div class="clue-card">
+                <span class="clue-tag">İPUCU</span>
+                <p id="clueText">Yükleniyor...</p>
+            </div>
+
             <div class="word-display" id="wordDisplay">_ _ _ _</div>
             
             <div class="letters-container" id="lettersContainer">
                 <!-- Harf butonları -->
             </div>
 
-            <div class="action-buttons">
-                <button class="btn btn-shuffle" onclick="shuffleLetters()">🔀 Karıştır</button>
+            <div class="jokers-bar">
+                <button class="btn-joker" onclick="useHint()">💡 Harf Al (-10P)</button>
+                <button class="btn-joker" onclick="shuffleLetters()">🔀 Karıştır</button>
             </div>
 
             <div class="controls">
-                <button class="btn btn-secondary" onclick="clearInput()">Temizle</button>
-                <button class="btn btn-primary" onclick="submitWord()">Gönder</button>
+                <button class="btn btn-secondary" onclick="clearInput()">Sil</button>
+                <button class="btn btn-primary" onclick="submitWord()">Cevapla</button>
             </div>
         </main>
 
