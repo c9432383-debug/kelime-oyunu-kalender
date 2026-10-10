@@ -1,34 +1,55 @@
+// Görsel destekli 1. ve 2. sınıf kelimeleri
 const learningWords = [
-    { word: "EL", letters: ['E', 'L'] },
-    { word: "AL", letters: ['A', 'L'] },
-    { word: "LA", letters: ['L', 'A'] },
-    { word: "AN", letters: ['A', 'N'] },
-    { word: "ALA", letters: ['A', 'L', 'A'] },
-    { word: "LALE", letters: ['L', 'A', 'L', 'E'] },
-    { word: "KALA", letters: ['K', 'A', 'L', 'A'] },
-    { word: "KALE", letters: ['K', 'A', 'L', 'E'] },
-    { word: "KEL", letters: ['K', 'E', 'L'] },
-    { word: "LAK", letters: ['L', 'A', 'K'] },
-    { word: "KANA", letters: ['K', 'A', 'N', 'A'] },
-    { word: "AT", letters: ['A', 'T'] },
-    { word: "ET", letters: ['E', 'T'] },
-    { word: "TAT", letters: ['T', 'A', 'T'] },
-    { word: "ATLA", letters: ['A', 'T', 'L', 'A'] },
-    { word: "OL", letters: ['O', 'L'] },
-    { word: "MALT", letters: ['M', 'A', 'L', 'T'] }
+    { word: "LALE", image: "🌷", letters: ['L', 'A', 'L', 'E'] },
+    { word: "ELMA", image: "🍎", letters: ['E', 'L', 'M', 'A'] },
+    { word: "OKUL", image: "🏫", letters: ['O', 'K', 'U', 'L'] },
+    { word: "KİTAP", image: "📚", letters: ['K', 'İ', 'T', 'A', 'P'] },
+    { word: "ÇİÇEK", image: "🌸", letters: ['Ç', 'İ', 'Ç', 'E', 'K'] },
+    { word: "KELEBEK", image: "🦋", letters: ['K', 'E', 'L', 'E', 'B', 'E', 'K'] },
+    { word: "ARABA", image: "🚗", letters: ['A', 'R', 'A', 'B', 'A'] },
+    { word: "GÜNEŞ", image: "☀️", letters: ['G', 'Ü', 'N', 'E', 'Ş'] },
+    { word: "YILDIZ", image: "⭐", letters: ['Y', 'I', 'L', 'D', 'I', 'Z'] },
+    { word: "BALIK", image: "🐟", letters: ['B', 'A', 'L', 'I', 'K'] },
+    { word: "KUŞ", image: "🐦", letters: ['K', 'U', 'Ş'] },
+    { word: "EV", image: "🏠", letters: ['E', 'V'] },
+    { word: "ÇANTA", image: "🎒", letters: ['Ç', 'A', 'N', 'T', 'A'] },
+    { word: "DEFTER", image: "📓", letters: ['D', 'E', 'F', 'T', 'E', 'R'] }
 ];
 
 let currentTarget = null;
 let currentInput = [];
-let score = 0;
-let solvedCount = 0;
+
+// Tarayıcı hafızasından puanları çek (Sıfırlanmasın diye)
+let score = parseInt(localStorage.getItem('minikOkur_score')) || 0;
+let solvedCount = parseInt(localStorage.getItem('minikOkur_solved')) || 0;
+let wrongCount = parseInt(localStorage.getItem('minikOkur_wrong')) || 0;
 
 function initGame() {
+    updateStatsDisplay();
     loadNewWord();
     initCanvas();
-    // Tarayıcı seslerinin yüklenmesini tetikle
     if ('speechSynthesis' in window) {
         window.speechSynthesis.getVoices();
+    }
+}
+
+function updateStatsDisplay() {
+    document.getElementById('score').textContent = score;
+    document.getElementById('solvedCount').textContent = solvedCount;
+    document.getElementById('wrongCount').textContent = wrongCount;
+    
+    // Hafızaya kaydet
+    localStorage.setItem('minikOkur_score', score);
+    localStorage.setItem('minikOkur_solved', solvedCount);
+    localStorage.setItem('minikOkur_wrong', wrongCount);
+}
+
+function resetStats() {
+    if (confirm('Tüm puanlar sıfırlansın mı?')) {
+        score = 0;
+        solvedCount = 0;
+        wrongCount = 0;
+        updateStatsDisplay();
     }
 }
 
@@ -38,8 +59,7 @@ function loadNewWord() {
     currentTarget = learningWords[randomIndex];
 
     document.getElementById('targetWordText').textContent = currentTarget.word;
-    document.getElementById('solvedCount').textContent = solvedCount;
-    document.getElementById('score').textContent = score;
+    document.getElementById('targetImage').textContent = currentTarget.image;
 
     renderLetters();
     updateDisplay();
@@ -94,15 +114,19 @@ function submitWord() {
     if (word === currentTarget.word) {
         score += 10;
         solvedCount++;
-        showMessage('Harikasın! Aferin sana! 🌟🎉');
+        updateStatsDisplay();
         
+        showMessage('Harikasın! Aferin sana! 👍🎉');
         speakText('Tebrikler!');
-        triggerFireworks();
+        triggerLikeFireworks();
         
         setTimeout(() => {
             loadNewWord();
         }, 1800);
     } else {
+        wrongCount++;
+        updateStatsDisplay();
+        
         showMessage('Tekrar dene, başarabilirsin! 💪');
         speakText('Aaaaaa');
         clearInput();
@@ -119,19 +143,17 @@ function showMessage(msg) {
     }
 }
 
-/* --- KADIN / İNCE SES AYARI --- */
 function speakText(text) {
     if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'tr-TR';
         utterance.rate = 0.95; 
-        utterance.pitch = 1.8; // Kalın erkek sesini engellemek için ses tonunu maksimuma yakın incelettik
+        utterance.pitch = 1.8; 
 
         const voices = window.speechSynthesis.getVoices();
         const turkishVoices = voices.filter(v => v.lang.includes('tr') || v.lang.includes('TR'));
         
-        // Türkçe kadın seslerini veya yaygın isimleri ara
         const femaleVoice = turkishVoices.find(v => {
             const name = v.name.toLowerCase();
             return name.includes('female') || 
@@ -141,8 +163,7 @@ function speakText(text) {
                    name.includes('ece') || 
                    name.includes('cemre') || 
                    name.includes('deniz') || 
-                   name.includes('seda') ||
-                   name.includes('sezen');
+                   name.includes('seda');
         });
 
         if (femaleVoice) {
@@ -153,6 +174,7 @@ function speakText(text) {
     }
 }
 
+/* --- LIKE (👍) ANİMASYON SİSTEMİ --- */
 let canvas, ctx, particles = [];
 
 function initCanvas() {
@@ -170,30 +192,27 @@ function resizeCanvas() {
     canvas.height = window.innerHeight;
 }
 
-function triggerFireworks() {
+function triggerLikeFireworks() {
     if (!canvas) return;
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 5; i++) {
         const x = Math.random() * canvas.width * 0.8 + canvas.width * 0.1;
-        const y = Math.random() * canvas.height * 0.5 + canvas.height * 0.1;
-        createFireworkExplosion(x, y);
+        const y = Math.random() * canvas.height * 0.5 + canvas.height * 0.2;
+        createLikeParticle(x, y);
     }
 }
 
-function createFireworkExplosion(x, y) {
-    const particleCount = 60;
-    const colors = ['#f59e0b', '#22c55e', '#3b82f6', '#ec4899', '#8b5cf6', '#eab308'];
-    
-    for (let i = 0; i < particleCount; i++) {
+function createLikeParticle(x, y) {
+    const count = 12;
+    for (let i = 0; i < count; i++) {
         const angle = Math.random() * Math.PI * 2;
-        const speed = Math.random() * 6 + 2;
+        const speed = Math.random() * 4 + 2;
         particles.push({
             x: x,
             y: y,
             vx: Math.cos(angle) * speed,
-            vy: Math.sin(angle) * speed,
+            vy: Math.sin(angle) * speed - 2,
             alpha: 1,
-            color: colors[Math.floor(Math.random() * colors.length)],
-            size: Math.random() * 4 + 2,
+            size: Math.random() * 20 + 24,
             decay: Math.random() * 0.015 + 0.01
         });
     }
@@ -207,7 +226,6 @@ function loop() {
         const p = particles[i];
         p.x += p.vx;
         p.y += p.vy;
-        p.vy += 0.05;
         p.alpha -= p.decay;
 
         if (p.alpha <= 0) {
@@ -217,10 +235,8 @@ function loop() {
 
         ctx.save();
         ctx.globalAlpha = p.alpha;
-        ctx.fillStyle = p.color;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.font = `${p.size}px sans-serif`;
+        ctx.fillText('👍', p.x, p.y);
         ctx.restore();
     }
 
