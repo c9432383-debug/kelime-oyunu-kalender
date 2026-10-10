@@ -43,6 +43,7 @@ function loadNewWord() {
 
 function renderLetters() {
     const container = document.getElementById('lettersContainer');
+    if (!container) return;
     container.innerHTML = '';
 
     const shuffledLetters = [...currentTarget.letters].sort(() => Math.random() - 0.5);
@@ -75,6 +76,7 @@ function clearInput() {
 
 function updateDisplay() {
     const display = document.getElementById('wordDisplay');
+    if (!display) return;
     if (currentInput.length === 0) {
         display.textContent = '_ '.repeat(currentTarget.word.length).trim();
     } else {
@@ -90,7 +92,7 @@ function submitWord() {
         solvedCount++;
         showMessage('Harikasın! Aferin sana! 🌟🎉');
         
-        // HAVAİ FİŞEK PATLAT!
+        speakText('Tebrikler!');
         triggerFireworks();
         
         setTimeout(() => {
@@ -98,23 +100,44 @@ function submitWord() {
         }, 1800);
     } else {
         showMessage('Tekrar dene, başarabilirsin! 💪');
+        speakText('Aaaaaa');
         clearInput();
     }
 }
 
 function showMessage(msg) {
     const msgBox = document.getElementById('message');
-    msgBox.textContent = msg;
-    setTimeout(() => {
-        msgBox.textContent = '';
-    }, 1500);
+    if (msgBox) {
+        msgBox.textContent = msg;
+        setTimeout(() => {
+            msgBox.textContent = '';
+        }, 1500);
+    }
 }
 
-/* --- HAVAİ FİŞEK VE PARTİKÜL ANİMASYON SİSTEMİ --- */
+function speakText(text) {
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'tr-TR';
+        utterance.rate = 0.9;
+        utterance.pitch = 1.2;
+
+        const voices = window.speechSynthesis.getVoices();
+        const femaleVoice = voices.find(v => v.lang.includes('tr') && (v.name.includes('female') || v.name.includes('Yelda') || v.name.includes('Google') || v.name.includes('Seda')));
+        if (femaleVoice) {
+            utterance.voice = femaleVoice;
+        }
+
+        window.speechSynthesis.speak(utterance);
+    }
+}
+
 let canvas, ctx, particles = [];
 
 function initCanvas() {
     canvas = document.getElementById('fireworksCanvas');
+    if (!canvas) return;
     ctx = canvas.getContext('2d');
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
@@ -122,12 +145,13 @@ function initCanvas() {
 }
 
 function resizeCanvas() {
+    if (!canvas) return;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 }
 
 function triggerFireworks() {
-    // Ekranda farklı noktalardan 3 adet havai fişek patlat
+    if (!canvas) return;
     for (let i = 0; i < 3; i++) {
         const x = Math.random() * canvas.width * 0.8 + canvas.width * 0.1;
         const y = Math.random() * canvas.height * 0.5 + canvas.height * 0.1;
@@ -156,13 +180,14 @@ function createFireworkExplosion(x, y) {
 }
 
 function loop() {
+    if (!ctx) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i];
         p.x += p.vx;
         p.y += p.vy;
-        p.vy += 0.05; // Yerçekimi etkisi
+        p.vy += 0.05;
         p.alpha -= p.decay;
 
         if (p.alpha <= 0) {
