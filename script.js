@@ -1,102 +1,149 @@
-// Örnek Kelime Havuzu ve Ayarlar
-const targetLetters = ['A', 'L', 'M', 'A', 'K', 'S'];
-const validWords = ['ELMA', 'ALMAK', 'MASA', 'KAS', 'LAMA', 'KALA', 'SALA', 'MALA', 'AKSA', 'ALMA'];
-
-let currentInput = [];
-let score = 0;
-let timeLeft = 60;
-let timerInterval;
-
-const wordDisplay = document.getElementById('wordDisplay');
-const lettersContainer = document.getElementById('lettersContainer');
-const scoreDisplay = document.getElementById('score');
-const timerDisplay = document.getElementById('timer');
-const messageBox = document.getElementById('message');
-
-function initGame() {
-    renderLetters();
-    startTimer();
-    updateDisplay();
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    user-select: none;
 }
 
-function renderLetters() {
-    lettersContainer.innerHTML = '';
-    targetLetters.forEach((letter, index) => {
-        const btn = document.createElement('button');
-        btn.classList.add('letter-btn');
-        btn.textContent = letter;
-        btn.id = `btn-${index}`;
-        btn.onclick = () => selectLetter(letter, index);
-        lettersContainer.appendChild(btn);
-    });
+body {
+    background-color: #0f172a;
+    color: #f8fafc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
 }
 
-function selectLetter(letter, index) {
-    currentInput.push({ letter, index });
-    document.getElementById(`btn-${index}`).classList.add('disabled');
-    updateDisplay();
+.app-container {
+    width: 100%;
+    max-width: 420px;
+    height: 100vh;
+    max-height: 840px;
+    background: #1e293b;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 24px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
 }
 
-function clearInput() {
-    currentInput.forEach(item => {
-        document.getElementById(`btn-${item.index}`).classList.remove('disabled');
-    });
-    currentInput = [];
-    updateDisplay();
+header {
+    text-align: center;
 }
 
-function updateDisplay() {
-    if (currentInput.length === 0) {
-        wordDisplay.textContent = '_ '.repeat(4).trim();
-    } else {
-        wordDisplay.textContent = currentInput.map(item => item.letter).join('');
-    }
+h1 {
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    color: #38bdf8;
+    margin-bottom: 16px;
 }
 
-function submitWord() {
-    const word = currentInput.map(item => item.letter).join('');
-    
-    if (word.length < 2) {
-        showMessage('Çok kısa!');
-        return;
-    }
-
-    if (validWords.includes(word)) {
-        const gainedScore = word.length * 10;
-        score += gainedScore;
-        scoreDisplay.textContent = score;
-        showMessage(`Tebrikler! +${gainedScore} Puan`);
-    } else {
-        showMessage('Geçersiz kelime!');
-    }
-
-    clearInput();
+.stats-board {
+    display: flex;
+    justify-content: space-around;
+    background: #334155;
+    padding: 12px;
+    border-radius: 12px;
 }
 
-function showMessage(msg) {
-    messageBox.textContent = msg;
-    setTimeout(() => {
-        messageBox.textContent = '';
-    }, 1500);
+.stat-box {
+    display: flex;
+    flex-direction: column;
+    font-size: 1.15rem;
+    font-weight: bold;
 }
 
-function startTimer() {
-    timerInterval = setInterval(() => {
-        timeLeft--;
-        timerDisplay.textContent = timeLeft;
-
-        if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            showMessage('Süre Bitti! Toplam Puan: ' + score);
-            disableAll();
-        }
-    }, 1000);
+.stat-box .label {
+    font-size: 0.7rem;
+    color: #94a3b8;
+    text-transform: uppercase;
 }
 
-function disableAll() {
-    document.querySelectorAll('.letter-btn, .btn').forEach(btn => {
-        btn.disabled = true;
-    });
+.word-display {
+    font-size: 2.25rem;
+    font-weight: bold;
+    letter-spacing: 8px;
+    text-align: center;
+    margin: 24px 0;
+    color: #facc15;
+    min-height: 50px;
 }
 
-window.onload = initGame;
+.letters-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.letter-btn {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    border: none;
+    background: #3b82f6;
+    color: white;
+    font-size: 1.4rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    transition: transform 0.1s, background-color 0.2s;
+}
+
+.letter-btn:active {
+    transform: scale(0.92);
+}
+
+.letter-btn.disabled {
+    background: #475569;
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.btn-shuffle {
+    background: #8b5cf6;
+    color: white;
+    width: auto;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+}
+
+.controls {
+    display: flex;
+    gap: 12px;
+}
+
+.btn {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: #22c55e;
+    color: white;
+}
+
+.btn-secondary {
+    background: #ef4444;
+    color: white;
+}
+
+.message-box {
+    text-align: center;
+    font-weight: bold;
+    min-height: 24px;
+    color: #38bdf8;
+}
