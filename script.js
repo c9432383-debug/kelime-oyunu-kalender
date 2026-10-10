@@ -1,189 +1,185 @@
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    user-select: none;
+const questions = [
+    {
+        clue: "Türkiye'nin başkenti neresidir?",
+        word: "ANKARA",
+        letters: ['K', 'A', 'R', 'A', 'N', 'A']
+    },
+    {
+        clue: "Yaz mevsiminde en çok tüketilen, içi kırmızı dışı yeşil meyve.",
+        word: "KARPUZ",
+        letters: ['Z', 'P', 'R', 'A', 'K', 'U']
+    },
+    {
+        clue: "Bilişim ve yazılım dünyasının vazgeçilmezi, akıllı makineler bilimi.",
+        word: "YAPAY",
+        letters: ['Y', 'P', 'A', 'A', 'Y']
+    },
+    {
+        clue: "Geceleri gökyüzünde parlayan, Dünyamızın uydusu.",
+        word: "AY",
+        letters: ['Y', 'A']
+    },
+    {
+        clue: "Masmavi suların, kumun ve güneşin tadının çıkarıldığı tatil yeri.",
+        word: "SAHİL",
+        letters: ['L', 'İ', 'H', 'A', 'S']
+    }
+];
+
+let currentQuestionIndex = 0;
+let currentInput = [];
+let score = 0;
+let timeLeft = 20;
+let timerInterval;
+
+function initGame() {
+    loadQuestion();
 }
 
-body {
-    background-color: #090d16;
-    color: #f8fafc;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+function loadQuestion() {
+    if (currentQuestionIndex >= questions.length) {
+        endGame();
+        return;
+    }
+
+    currentInput = [];
+    timeLeft = 20;
+    
+    document.getElementById('timer').textContent = timeLeft + 's';
+    document.getElementById('questionNum').textContent = `${currentQuestionIndex + 1}/${questions.length}`;
+    
+    const q = questions[currentQuestionIndex];
+    document.getElementById('clueText').textContent = q.clue;
+    
+    renderLetters();
+    updateDisplay();
+    startTimer();
 }
 
-.app-container {
-    width: 100%;
-    max-width: 420px;
-    height: 100vh;
-    max-height: 840px;
-    background: #111827;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 20px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-    border: 1px solid #1f2937;
+function renderLetters() {
+    const container = document.getElementById('lettersContainer');
+    container.innerHTML = '';
+    const q = questions[currentQuestionIndex];
+    
+    q.letters.forEach((letter, index) => {
+        const btn = document.createElement('button');
+        btn.classList.add('letter-btn');
+        btn.textContent = letter;
+        btn.id = `btn-${index}`;
+        btn.onclick = () => selectLetter(letter, index);
+        container.appendChild(btn);
+    });
 }
 
-header {
-    text-align: center;
+function shuffleLetters() {
+    const q = questions[currentQuestionIndex];
+    q.letters.sort(() => Math.random() - 0.5);
+    renderLetters();
+    clearInput();
 }
 
-.game-brand {
-    font-size: 1.25rem;
-    font-weight: 800;
-    letter-spacing: 3px;
-    color: #f59e0b;
-    margin-bottom: 12px;
+function selectLetter(letter, index) {
+    currentInput.push({ letter, index });
+    document.getElementById(`btn-${index}`).classList.add('disabled');
+    updateDisplay();
 }
 
-.stats-board {
-    display: flex;
-    justify-content: space-around;
-    background: #1f2937;
-    padding: 10px;
-    border-radius: 12px;
-    border: 1px solid #374151;
+function clearInput() {
+    currentInput.forEach(item => {
+        const el = document.getElementById(`btn-${item.index}`);
+        if (el) el.classList.remove('disabled');
+    });
+    currentInput = [];
+    updateDisplay();
 }
 
-.stat-box {
-    display: flex;
-    flex-direction: column;
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: #fff;
+function updateDisplay() {
+    const q = questions[currentQuestionIndex];
+    const display = document.getElementById('wordDisplay');
+    if (currentInput.length === 0) {
+        display.textContent = '_ '.repeat(q.word.length).trim();
+    } else {
+        display.textContent = currentInput.map(item => item.letter).join(' ');
+    }
 }
 
-.stat-box .label {
-    font-size: 0.65rem;
-    color: #9ca3af;
-    text-transform: uppercase;
+function useHint() {
+    const q = questions[currentQuestionIndex];
+    if (score < 10) {
+        showMessage('Yetersiz Puan!');
+        return;
+    }
+    score -= 10;
+    document.getElementById('score').textContent = score;
+
+    const currentWordSoFar = currentInput.map(i => i.letter).join('');
+    const nextCharIndex = currentWordSoFar.length;
+    
+    if (nextCharIndex < q.word.length) {
+        const targetChar = q.word[nextCharIndex];
+        const btnElements = document.querySelectorAll('.letter-btn');
+        for (let btn of btnElements) {
+            if (btn.textContent === targetChar && !btn.classList.contains('disabled')) {
+                const btnId = parseInt(btn.id.replace('btn-', ''));
+                selectLetter(targetChar, btnId);
+                break;
+            }
+        }
+    }
 }
 
-.clue-card {
-    background: #1f2937;
-    padding: 16px;
-    border-radius: 12px;
-    margin: 16px 0;
-    border-left: 4px solid #3b82f6;
+function submitWord() {
+    const word = currentInput.map(item => item.letter).join('');
+    const q = questions[currentQuestionIndex];
+    
+    if (word === q.word) {
+        clearInterval(timerInterval);
+        const gainedScore = timeLeft * 5 + 20;
+        score += gainedScore;
+        document.getElementById('score').textContent = score;
+        showMessage(`Doğru! +${gainedScore} Puan 🎉`);
+        
+        currentQuestionIndex++;
+        setTimeout(loadQuestion, 1500);
+    } else {
+        showMessage('Yanlış kelime, tekrar dene!');
+    }
 }
 
-.clue-tag {
-    font-size: 0.7rem;
-    color: #3b82f6;
-    font-weight: bold;
-    letter-spacing: 1px;
+function showMessage(msg) {
+    const msgBox = document.getElementById('message');
+    msgBox.textContent = msg;
+    setTimeout(() => {
+        msgBox.textContent = '';
+    }, 1500);
 }
 
-.clue-card p {
-    font-size: 1rem;
-    margin-top: 4px;
-    color: #e5e7eb;
+function startTimer() {
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        const timerEl = document.getElementById('timer');
+        if(timerEl) timerEl.textContent = timeLeft + 's';
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            showMessage('Süre Bitti! Diğer soruya geçiliyor...');
+            currentQuestionIndex++;
+            setTimeout(loadQuestion, 1500);
+        }
+    }, 1000);
 }
 
-.word-display {
-    font-size: 2.2rem;
-    font-weight: bold;
-    letter-spacing: 6px;
-    text-align: center;
-    margin: 16px 0;
-    color: #fbbf24;
-    min-height: 50px;
-    background: #1a2234;
-    padding: 8px;
-    border-radius: 10px;
-    border: 1px dashed #374151;
+function endGame() {
+    clearInterval(timerInterval);
+    document.querySelector('main').innerHTML = `
+        <div style="text-align: center; padding: 40px 0;">
+            <h2 style="color: #fbbf24; font-size: 2rem; margin-bottom: 16px;">OYUN BİTTİ! 🏆</h2>
+            <p style="font-size: 1.2rem; color: #9ca3af; margin-bottom: 24px;">Toplam Puanınız: <strong style="color:#10b981;">${score}</strong></p>
+            <button class="btn btn-primary" onclick="location.reload()">Tekrar Oyna</button>
+        </div>
+    `;
 }
 
-.letters-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    margin-bottom: 16px;
-}
-
-.letter-btn {
-    width: 50px;
-    height: 50px;
-    border-radius: 12px;
-    border: none;
-    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-    color: white;
-    font-size: 1.3rem;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
-    transition: transform 0.1s, background-color 0.2s;
-}
-
-.letter-btn:active {
-    transform: scale(0.9);
-}
-
-.letter-btn.disabled {
-    background: #374151;
-    color: #6b7280;
-    opacity: 0.5;
-    pointer-events: none;
-}
-
-.jokers-bar {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 16px;
-}
-
-.btn-joker {
-    flex: 1;
-    background: #374151;
-    color: #d1d5db;
-    border: none;
-    padding: 10px;
-    border-radius: 8px;
-    font-size: 0.85srem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.btn-joker:hover {
-    background: #4b5563;
-}
-
-.controls {
-    display: flex;
-    gap: 12px;
-}
-
-.btn {
-    flex: 1;
-    padding: 14px;
-    border: none;
-    border-radius: 10px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.btn-primary {
-    background: #10b981;
-    color: white;
-}
-
-.btn-secondary {
-    background: #ef4444;
-    color: white;
-}
-
-.message-box {
-    text-align: center;
-    font-weight: bold;
-    min-height: 24px;
-    color: #38bdf8;
-    margin-top: 8px;
-}
+// Sayfa tamamen yüklendiğinde oyunu başlat
+window.onload = initGame;
