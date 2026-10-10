@@ -16,7 +16,6 @@ body {
     overflow: hidden;
 }
 
-/* Havai Fişek Tuvali (Tüm ekranı kaplar, tıklamalara engel olmaz) */
 #fireworksCanvas {
     position: fixed;
     top: 0;
