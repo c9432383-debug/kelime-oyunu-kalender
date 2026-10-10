@@ -195,5 +195,4 @@ function endGame() {
     }
 }
 
-// Doğrudan başlat (Bekleme yapmadan direkt çalışır)
 initGame();
