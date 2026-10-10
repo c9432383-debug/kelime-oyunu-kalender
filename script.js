@@ -7,7 +7,7 @@
 }
 
 body {
-    background-color: #0f172a;
+    background-color: #090d16;
     color: #f8fafc;
     display: flex;
     justify-content: center;
@@ -20,100 +20,139 @@ body {
     max-width: 420px;
     height: 100vh;
     max-height: 840px;
-    background: #1e293b;
+    background: #111827;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 24px;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    border: 1px solid #1f2937;
 }
 
 header {
     text-align: center;
 }
 
-h1 {
-    font-size: 1.5rem;
-    letter-spacing: 2px;
-    color: #38bdf8;
-    margin-bottom: 16px;
+.game-brand {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: #f59e0b;
+    margin-bottom: 12px;
 }
 
 .stats-board {
     display: flex;
     justify-content: space-around;
-    background: #334155;
-    padding: 12px;
+    background: #1f2937;
+    padding: 10px;
     border-radius: 12px;
+    border: 1px solid #374151;
 }
 
 .stat-box {
     display: flex;
     flex-direction: column;
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     font-weight: bold;
+    color: #fff;
 }
 
 .stat-box .label {
-    font-size: 0.7rem;
-    color: #94a3b8;
+    font-size: 0.65rem;
+    color: #9ca3af;
     text-transform: uppercase;
 }
 
-.word-display {
-    font-size: 2.25rem;
+.clue-card {
+    background: #1f2937;
+    padding: 16px;
+    border-radius: 12px;
+    margin: 16px 0;
+    border-left: 4px solid #3b82f6;
+}
+
+.clue-tag {
+    font-size: 0.7rem;
+    color: #3b82f6;
     font-weight: bold;
-    letter-spacing: 8px;
+    letter-spacing: 1px;
+}
+
+.clue-card p {
+    font-size: 1rem;
+    margin-top: 4px;
+    color: #e5e7eb;
+}
+
+.word-display {
+    font-size: 2.2rem;
+    font-weight: bold;
+    letter-spacing: 6px;
     text-align: center;
-    margin: 24px 0;
-    color: #facc15;
+    margin: 16px 0;
+    color: #fbbf24;
     min-height: 50px;
+    background: #1a2234;
+    padding: 8px;
+    border-radius: 10px;
+    border: 1px dashed #374151;
 }
 
 .letters-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 10px;
     justify-content: center;
     margin-bottom: 16px;
 }
 
 .letter-btn {
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
     border: none;
-    background: #3b82f6;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
     color: white;
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     font-weight: bold;
     cursor: pointer;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
     transition: transform 0.1s, background-color 0.2s;
 }
 
 .letter-btn:active {
-    transform: scale(0.92);
+    transform: scale(0.9);
 }
 
 .letter-btn.disabled {
-    background: #475569;
-    opacity: 0.4;
+    background: #374151;
+    color: #6b7280;
+    opacity: 0.5;
     pointer-events: none;
 }
 
-.action-buttons {
+.jokers-bar {
     display: flex;
-    justify-content: center;
+    gap: 10px;
     margin-bottom: 16px;
 }
 
-.btn-shuffle {
-    background: #8b5cf6;
-    color: white;
-    width: auto;
-    padding: 8px 16px;
-    font-size: 0.9rem;
+.btn-joker {
+    flex: 1;
+    background: #374151;
+    color: #d1d5db;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.85srem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-joker:hover {
+    background: #4b5563;
 }
 
 .controls {
@@ -132,7 +171,7 @@ h1 {
 }
 
 .btn-primary {
-    background: #22c55e;
+    background: #10b981;
     color: white;
 }
 
@@ -146,4 +185,5 @@ h1 {
     font-weight: bold;
     min-height: 24px;
     color: #38bdf8;
+    margin-top: 8px;
 }
