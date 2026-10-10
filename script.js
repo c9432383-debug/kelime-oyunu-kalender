@@ -26,6 +26,10 @@ let solvedCount = 0;
 function initGame() {
     loadNewWord();
     initCanvas();
+    // Tarayıcı seslerinin yüklenmesini tetikle
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.getVoices();
+    }
 }
 
 function loadNewWord() {
@@ -43,6 +47,7 @@ function loadNewWord() {
 
 function renderLetters() {
     const container = document.getElementById('lettersContainer');
+    if (!container) return;
     container.innerHTML = '';
 
     const shuffledLetters = [...currentTarget.letters].sort(() => Math.random() - 0.5);
@@ -75,6 +80,7 @@ function clearInput() {
 
 function updateDisplay() {
     const display = document.getElementById('wordDisplay');
+    if (!display) return;
     if (currentInput.length === 0) {
         display.textContent = '_ '.repeat(currentTarget.word.length).trim();
     } else {
@@ -90,10 +96,7 @@ function submitWord() {
         solvedCount++;
         showMessage('Harikasın! Aferin sana! 🌟🎉');
         
-        // Kadın sesiyle "Tebrikler!" de
         speakText('Tebrikler!');
-        
-        // HAVAİ FİŞEK PATLAT!
         triggerFireworks();
         
         setTimeout(() => {
@@ -101,34 +104,47 @@ function submitWord() {
         }, 1800);
     } else {
         showMessage('Tekrar dene, başarabilirsin! 💪');
-        
-        // Kadın sesiyle "Aaaaaa" de
         speakText('Aaaaaa');
-        
         clearInput();
     }
 }
 
 function showMessage(msg) {
     const msgBox = document.getElementById('message');
-    msgBox.textContent = msg;
-    setTimeout(() => {
-        msgBox.textContent = '';
-    }, 1500);
+    if (msgBox) {
+        msgBox.textContent = msg;
+        setTimeout(() => {
+            msgBox.textContent = '';
+        }, 1500);
+    }
 }
 
-/* --- KADIN SESİ İLE SESLENDİRME FONKSİYONU --- */
+/* --- KADIN / İNCE SES AYARI --- */
 function speakText(text) {
     if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel(); // Önceki sesleri durdur
+        window.speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'tr-TR';
-        utterance.rate = 0.9; // Çocukların rahat anlaması için hafif yavaş konuşma hızı
-        utterance.pitch = 1.2; // Kadın / İnce ton sesi elde etmek için ses tonunu yükseltiyoruz
+        utterance.rate = 0.95; 
+        utterance.pitch = 1.8; // Kalın erkek sesini engellemek için ses tonunu maksimuma yakın incelettik
 
-        // Cihazdaki Türkçe sesleri tara ve varsa kadın sesini tercih et
         const voices = window.speechSynthesis.getVoices();
-        const femaleVoice = voices.find(v => v.lang.includes('tr') && (v.name.includes('female') || v.name.includes('Yelda') || v.name.includes('Google') || v.name.includes('Seda')));
+        const turkishVoices = voices.filter(v => v.lang.includes('tr') || v.lang.includes('TR'));
+        
+        // Türkçe kadın seslerini veya yaygın isimleri ara
+        const femaleVoice = turkishVoices.find(v => {
+            const name = v.name.toLowerCase();
+            return name.includes('female') || 
+                   name.includes('kadın') || 
+                   name.includes('filiz') || 
+                   name.includes('yelda') || 
+                   name.includes('ece') || 
+                   name.includes('cemre') || 
+                   name.includes('deniz') || 
+                   name.includes('seda') ||
+                   name.includes('sezen');
+        });
+
         if (femaleVoice) {
             utterance.voice = femaleVoice;
         }
@@ -137,11 +153,11 @@ function speakText(text) {
     }
 }
 
-/* --- HAVAİ FİŞEK VE PARTİKÜL ANİMASYON SİSTEMİ --- */
 let canvas, ctx, particles = [];
 
 function initCanvas() {
     canvas = document.getElementById('fireworksCanvas');
+    if (!canvas) return;
     ctx = canvas.getContext('2d');
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
@@ -149,11 +165,13 @@ function initCanvas() {
 }
 
 function resizeCanvas() {
+    if (!canvas) return;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 }
 
 function triggerFireworks() {
+    if (!canvas) return;
     for (let i = 0; i < 3; i++) {
         const x = Math.random() * canvas.width * 0.8 + canvas.width * 0.1;
         const y = Math.random() * canvas.height * 0.5 + canvas.height * 0.1;
@@ -182,6 +200,7 @@ function createFireworkExplosion(x, y) {
 }
 
 function loop() {
+    if (!ctx) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     for (let i = particles.length - 1; i >= 0; i--) {
