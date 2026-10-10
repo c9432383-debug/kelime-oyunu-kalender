@@ -45,11 +45,15 @@ function loadQuestion() {
     currentInput = [];
     timeLeft = 20;
     
-    document.getElementById('timer').textContent = timeLeft + 's';
-    document.getElementById('questionNum').textContent = `${currentQuestionIndex + 1}/${questions.length}`;
+    const timerEl = document.getElementById('timer');
+    if(timerEl) timerEl.textContent = timeLeft + 's';
+    
+    const qNumEl = document.getElementById('questionNum');
+    if(qNumEl) qNumEl.textContent = `${currentQuestionIndex + 1}/${questions.length}`;
     
     const q = questions[currentQuestionIndex];
-    document.getElementById('clueText').textContent = q.clue;
+    const clueEl = document.getElementById('clueText');
+    if(clueEl) clueEl.textContent = q.clue;
     
     renderLetters();
     updateDisplay();
@@ -58,6 +62,7 @@ function loadQuestion() {
 
 function renderLetters() {
     const container = document.getElementById('lettersContainer');
+    if (!container) return;
     container.innerHTML = '';
     const q = questions[currentQuestionIndex];
     
@@ -80,7 +85,8 @@ function shuffleLetters() {
 
 function selectLetter(letter, index) {
     currentInput.push({ letter, index });
-    document.getElementById(`btn-${index}`).classList.add('disabled');
+    const btn = document.getElementById(`btn-${index}`);
+    if(btn) btn.classList.add('disabled');
     updateDisplay();
 }
 
@@ -96,6 +102,7 @@ function clearInput() {
 function updateDisplay() {
     const q = questions[currentQuestionIndex];
     const display = document.getElementById('wordDisplay');
+    if (!display) return;
     if (currentInput.length === 0) {
         display.textContent = '_ '.repeat(q.word.length).trim();
     } else {
@@ -110,7 +117,8 @@ function useHint() {
         return;
     }
     score -= 10;
-    document.getElementById('score').textContent = score;
+    const scoreEl = document.getElementById('score');
+    if(scoreEl) scoreEl.textContent = score;
 
     const currentWordSoFar = currentInput.map(i => i.letter).join('');
     const nextCharIndex = currentWordSoFar.length;
@@ -136,7 +144,8 @@ function submitWord() {
         clearInterval(timerInterval);
         const gainedScore = timeLeft * 5 + 20;
         score += gainedScore;
-        document.getElementById('score').textContent = score;
+        const scoreEl = document.getElementById('score');
+        if(scoreEl) scoreEl.textContent = score;
         showMessage(`Doğru! +${gainedScore} Puan 🎉`);
         
         currentQuestionIndex++;
@@ -148,10 +157,12 @@ function submitWord() {
 
 function showMessage(msg) {
     const msgBox = document.getElementById('message');
-    msgBox.textContent = msg;
-    setTimeout(() => {
-        msgBox.textContent = '';
-    }, 1500);
+    if(msgBox) {
+        msgBox.textContent = msg;
+        setTimeout(() => {
+            msgBox.textContent = '';
+        }, 1500);
+    }
 }
 
 function startTimer() {
@@ -172,14 +183,17 @@ function startTimer() {
 
 function endGame() {
     clearInterval(timerInterval);
-    document.querySelector('main').innerHTML = `
-        <div style="text-align: center; padding: 40px 0;">
-            <h2 style="color: #fbbf24; font-size: 2rem; margin-bottom: 16px;">OYUN BİTTİ! 🏆</h2>
-            <p style="font-size: 1.2rem; color: #9ca3af; margin-bottom: 24px;">Toplam Puanınız: <strong style="color:#10b981;">${score}</strong></p>
-            <button class="btn btn-primary" onclick="location.reload()">Tekrar Oyna</button>
-        </div>
-    `;
+    const mainEl = document.querySelector('main');
+    if(mainEl) {
+        mainEl.innerHTML = `
+            <div style="text-align: center; padding: 40px 0;">
+                <h2 style="color: #fbbf24; font-size: 2rem; margin-bottom: 16px;">OYUN BİTTİ! 🏆</h2>
+                <p style="font-size: 1.2rem; color: #9ca3af; margin-bottom: 24px;">Toplam Puanınız: <strong style="color:#10b981;">${score}</strong></p>
+                <button class="btn btn-primary" onclick="location.reload()">Tekrar Oyna</button>
+            </div>
+        `;
+    }
 }
 
-// Sayfa tamamen yüklendiğinde oyunu başlat
-window.onload = initGame;
+// Doğrudan başlat (Bekleme yapmadan direkt çalışır)
+initGame();
