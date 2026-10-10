@@ -120,12 +120,19 @@ function selectLetter(letter, index) {
     updateDisplay();
 }
 
+// TEKER TEKER SİLME ÖZELLİĞİ (Geri Tuşu Mantığı)
 function clearInput() {
-    currentInput.forEach(item => {
-        const el = document.getElementById(`btn-${item.index}`);
-        if (el) el.classList.remove('disabled');
-    });
-    currentInput = [];
+    if (currentInput.length === 0) return;
+    
+    // Son eklenen harfi listeden çıkar
+    const lastItem = currentInput.pop();
+    
+    // Sadece o harfe ait butonu tekrar aktif yap
+    const el = document.getElementById(`btn-${lastItem.index}`);
+    if (el) {
+        el.classList.remove('disabled');
+    }
+    
     updateDisplay();
 }
 
@@ -143,7 +150,7 @@ function submitWord() {
     const word = currentInput.map(item => item.letter).join('');
 
     if (word === currentTarget.word) {
-        score += 10 + (currentTarget.level * 2); // Seviye arttıkça daha çok puan
+        score += 10 + (currentTarget.level * 2); 
         solvedCount++;
         updateStatsDisplay();
         
@@ -160,7 +167,9 @@ function submitWord() {
         
         showMessage('Tekrar dene, başarabilirsin! 💪');
         speakText('Aaaaaa');
-        clearInput();
+        
+        // Yanlışta isterse hepsi sıfırlanabilir veya kullanıcı kaldığı yerden düzeltebilir. 
+        // Burada teker teker silme olduğu için kullanıcı yanlış yaptığında sil tuşuyla düzeltebilir.
     }
 }
 
