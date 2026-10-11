@@ -1,56 +1,63 @@
-// 1. Sınıftan 5. Sınıfa Kadar Aşamalı Kelime ve Görsel Havuzu
-const learningWords = [
-    // --- 1. SINIF SEVİYESİ (Temel Sesler ve Heceler) ---
-    { word: "LALE", image: "🌷", level: 1, letters: ['L', 'A', 'L', 'E'] },
-    { word: "ELMA", image: "🍎", level: 1, letters: ['E', 'L', 'M', 'A'] },
-    { word: "OKUL", image: "🏫", level: 1, letters: ['O', 'K', 'U', 'L'] },
-    { word: "EV", image: "🏠", level: 1, letters: ['E', 'V'] },
-    { word: "KUŞ", image: "🐦", level: 1, letters: ['K', 'U', 'Ş'] },
-    { word: "KİTAP", image: "📚", level: 1, letters: ['K', 'İ', 'T', 'A', 'P'] },
-    { word: "MASA", image: "🪑", level: 1, letters: ['M', 'A', 'S', 'A'] },
-    { word: "KEDİ", image: "🐱", level: 1, letters: ['K', 'E', 'D', 'İ'] },
+// 1-5. Sınıf Müfredat Kelimeleri ve Görselleri
+const baseWords = [
+    // 1. Sınıf
+    { word: "LALE", image: "🌷", level: 1 },
+    { word: "ELMA", image: "🍎", level: 1 },
+    { word: "OKUL", image: "🏫", level: 1 },
+    { word: "EV", image: "🏠", level: 1 },
+    { word: "KUŞ", image: "🐦", level: 1 },
+    { word: "KİTAP", image: "📚", level: 1 },
+    { word: "MASA", image: "🪑", level: 1 },
+    { word: "KEDİ", image: "🐱", level: 1 },
+    { word: "ARABA", image: "🚗", level: 1 },
+    { word: "BALIK", image: "🐟", level: 1 },
 
-    // --- 2. SINIF SEVİYESİ (Okul ve Çevre) ---
-    { word: "ÇİÇEK", image: "🌸", level: 2, letters: ['Ç', 'İ', 'Ç', 'E', 'K'] },
-    { word: "ARABA", image: "🚗", level: 2, letters: ['A', 'R', 'A', 'B', 'A'] },
-    { word: "GÜNEŞ", image: "☀️", level: 2, letters: ['G', 'Ü', 'N', 'E', 'Ş'] },
-    { word: "BALIK", image: "🐟", level: 2, letters: ['B', 'A', 'L', 'I', 'K'] },
-    { word: "ÇANTA", image: "🎒", level: 2, letters: ['Ç', 'A', 'N', 'T', 'A'] },
-    { word: "DEFTER", image: "📓", level: 2, letters: ['D', 'E', 'F', 'T', 'E', 'R'] },
-    { word: "ORMAN", image: "🌲", level: 2, letters: ['O', 'R', 'M', 'A', 'N'] },
+    // 2. Sınıf
+    { word: "ÇİÇEK", image: "🌸", level: 2 },
+    { word: "GÜNEŞ", image: "☀️", level: 2 },
+    { word: "ÇANTA", image: "🎒", level: 2 },
+    { word: "DEFTER", image: "📓", level: 2 },
+    { word: "ORMAN", image: "🌲", level: 2 },
+    { word: "YILDIZ", image: "⭐", level: 2 },
+    { word: "PENCERE", image: "🪟", level: 2 },
+    { word: "SİNCAP", image: "🐿️", level: 2 },
 
-    // --- 3. SINIF SEVİYESİ (Doğa ve Kavramlar) ---
-    { word: "KELEBEK", image: "🦋", level: 3, letters: ['K', 'E', 'L', 'E', 'B', 'E', 'K'] },
-    { word: "YILDIZ", image: "⭐", level: 3, letters: ['Y', 'I', 'L', 'D', 'I', 'Z'] },
-    { word: "PENCERE", image: "🪟", level: 3, letters: ['P', 'E', 'N', 'C', 'E', 'R', 'E'] },
-    { word: "SİNCAP", image: "🐿️", level: 3, letters: ['S', 'İ', 'N', 'C', 'A', 'P'] },
-    { word: "ŞEMSİYE", image: "☂️", level: 3, letters: ['Ş', 'E', 'M', 'S', 'İ', 'Y', 'E'] },
-    { word: "PAPAĞAN", image: "🦜", level: 3, letters: ['P', 'A', 'P', 'A', 'Ğ', 'A', 'N'] },
-    { word: "KARTAL", image: "🦅", level: 3, letters: ['K', 'A', 'R', 'T', 'A', 'L'] },
+    // 3. Sınıf
+    { word: "KELEBEK", image: "🦋", level: 3 },
+    { word: "ŞEMSİYE", image: "☂️", level: 3 },
+    { word: "PAPAĞAN", image: "🦜", level: 3 },
+    { word: "KARTAL", image: "🦅", level: 3 },
+    { word: "TAVŞAN", image: "🐰", level: 3 },
+    { word: "KAPLUMBAĞA", image: "🐢", level: 3 },
 
-    // --- 4. SINIF SEVİYESİ (Dersler, Bilim ve Değerler) ---
-    { word: "ÖĞRETMEN", image: "👩‍🏫", level: 4, letters: ['Ö', 'Ğ', 'R', 'E', 'T', 'M', 'E', 'N'] },
-    { word: "ARKADAŞ", image: "🤝", level: 4, letters: ['A', 'R', 'K', 'A', 'D', 'A', 'Ş'] },
-    { word: "MATEMATİK", image: "📐", level: 4, letters: ['M', 'A', 'T', 'E', 'M', 'A', 'T', 'İ', 'K'] },
-    { word: "GÖKYÜZÜ", image: "🌤️", level: 4, letters: ['G', 'Ö', 'K', 'Y', 'Ü', 'Z', 'Ü'] },
-    { word: "GEZEGEN", image: "🪐", level: 4, letters: ['G', 'E', 'Z', 'E', 'G', 'E', 'N'] },
-    { word: "TENEFFÜS", image: "🔔", level: 4, letters: ['T', 'E', 'N', 'E', 'F', 'F', 'Ü', 'S'] },
-    { word: "BAYRAK", image: "🇹🇷", level: 4, letters: ['B', 'A', 'Y', 'R', 'A', 'K'] },
+    // 4. Sınıf
+    { word: "ÖĞRETMEN", image: "👩‍🏫", level: 4 },
+    { word: "ARKADAŞ", image: "🤝", level: 4 },
+    { word: "MATEMATİK", image: "📐", level: 4 },
+    { word: "GÖKYÜZÜ", image: "🌤️", level: 4 },
+    { word: "GEZEGEN", image: "🪐", level: 4 },
+    { word: "TENEFFÜS", image: "🔔", level: 4 },
+    { word: "BAYRAK", image: "🇹🇷", level: 4 },
 
-    // --- 5. SINIF SEVİYESİ (Ortaokul Başlangıcı ve Genel Kültür) ---
-    { word: "KÜTÜPHANE", image: "🏛️", level: 5, letters: ['K', 'Ü', 'T', 'Ü', 'P', 'H', 'A', 'N', 'E'] },
-    { word: "BİLGİSAYAR", image: "💻", level: 5, letters: ['B', 'İ', 'L', 'G', 'İ', 'S', 'A', 'Y', 'A', 'R'] },
-    { word: "CUMHURİYET", image: "🏛️", level: 5, letters: ['C', 'U', 'M', 'H', 'U', 'R', 'İ', 'Y', 'E', 'T'] },
-    { word: "LABORATUVAR", image: "🔬", level: 5, letters: ['L', 'A', 'B', 'O', 'R', 'A', 'T', 'U', 'V', 'A', 'R'] },
-    { word: "TEKNOLOJİ", image: "🤖", level: 5, letters: ['T', 'E', 'K', 'N', 'O', 'L', 'O', 'J', 'İ'] },
-    { word: "GÖKDELEN", image: "🏢", level: 5, letters: ['G', 'Ö', 'K', 'D', 'E', 'L', 'E', 'N'] },
-    { word: "ASTRONOT", image: "👨‍🚀", level: 5, letters: ['A', 'S', 'T', 'R', 'O', 'N', 'O', 'T'] }
+    // 5. Sınıf
+    { word: "KÜTÜPHANE", image: "🏛️", level: 5 },
+    { word: "BİLGİSAYAR", image: "💻", level: 5 },
+    { word: "CUMHURİYET", image: "🏛️", level: 5 },
+    { word: "LABORATUVAR", image: "🔬", level: 5 },
+    { word: "TEKNOLOJİ", image: "🤖", level: 5 },
+    { word: "GÖKDELEN", image: "🏢", level: 5 },
+    { word: "ASTRONOT", image: "👨‍🚀", level: 5 }
 ];
+
+// Sınırsız kelime üretimi için Türkçe hece oluşturucu parçalar
+const vowels = ['A', 'E', 'I', 'İ', 'O', 'Ö', 'U', 'Ü'];
+const consonants = ['B', 'C', 'Ç', 'D', 'F', 'G', 'Ğ', 'H', 'K', 'L', 'M', 'N', 'P', 'R', 'S', 'Ş', 'T', 'V', 'Y', 'Z'];
+const genericEmojis = ['✨', '🌟', '🎯', '🎨', '🧩', '🚀', '💡', '🏆', '⭐', '🎈'];
 
 let currentTarget = null;
 let currentInput = [];
 
-// Tarayıcı hafızasından puanları çek
+// Tarayıcı hafızasından kayıtlı puanları yükle
 let score = parseInt(localStorage.getItem('minikOkur_score')) || 0;
 let solvedCount = parseInt(localStorage.getItem('minikOkur_solved')) || 0;
 let wrongCount = parseInt(localStorage.getItem('minikOkur_wrong')) || 0;
@@ -69,7 +76,6 @@ function updateStatsDisplay() {
     document.getElementById('solvedCount').textContent = solvedCount;
     document.getElementById('wrongCount').textContent = wrongCount;
     
-    // Hafızaya kaydet
     localStorage.setItem('minikOkur_score', score);
     localStorage.setItem('minikOkur_solved', solvedCount);
     localStorage.setItem('minikOkur_wrong', wrongCount);
@@ -84,10 +90,32 @@ function resetStats() {
     }
 }
 
+// SINIRSIZ KELİME MOTORU
 function loadNewWord() {
     currentInput = [];
-    const randomIndex = Math.floor(Math.random() * learningWords.length);
-    currentTarget = learningWords[randomIndex];
+    
+    // %70 ihtimalle sabit müfredat kelimelerinden, %30 ihtimalle dinamik üretilen kelimelerden seçer
+    const isBaseWord = Math.random() < 0.7;
+
+    if (isBaseWord && baseWords.length > 0) {
+        const randomIndex = Math.floor(Math.random() * baseWords.length);
+        const item = baseWords[randomIndex];
+        currentTarget = {
+            word: item.word,
+            image: item.image,
+            level: item.level,
+            letters: item.word.split('')
+        };
+    } else {
+        // Rastgele yeni bir heceli kelime oluştur (Sonsuz Mod)
+        const generated = generateRandomTurkishWord();
+        currentTarget = {
+            word: generated.word,
+            image: generated.image,
+            level: 3,
+            letters: generated.word.split('')
+        };
+    }
 
     document.getElementById('targetWordText').textContent = currentTarget.word;
     document.getElementById('targetImage').textContent = currentTarget.image;
@@ -96,11 +124,27 @@ function loadNewWord() {
     updateDisplay();
 }
 
+// Türkçe kurallarına uygun rastgele kelime üreteci
+function generateRandomTurkishWord() {
+    const syllableCount = Math.floor(Math.random() * 2) + 2; // 2 veya 3 heceli
+    let word = "";
+
+    for (let i = 0; i < syllableCount; i++) {
+        const c = consonants[Math.floor(Math.random() * consonants.length)];
+        const v = vowels[Math.floor(Math.random() * vowels.length)];
+        word += c + v;
+    }
+
+    const randomEmoji = genericEmojis[Math.floor(Math.random() * genericEmojis.length)];
+    return { word, image: randomEmoji };
+}
+
 function renderLetters() {
     const container = document.getElementById('lettersContainer');
     if (!container) return;
     container.innerHTML = '';
 
+    // Harfleri karıştır
     const shuffledLetters = [...currentTarget.letters].sort(() => Math.random() - 0.5);
 
     shuffledLetters.forEach((letter, index) => {
@@ -120,14 +164,11 @@ function selectLetter(letter, index) {
     updateDisplay();
 }
 
-// TEKER TEKER SİLME ÖZELLİĞİ (Geri Tuşu Mantığı)
+// TEKER TEKER SİLME (Geri Tuşu)
 function clearInput() {
     if (currentInput.length === 0) return;
     
-    // Son eklenen harfi listeden çıkar
     const lastItem = currentInput.pop();
-    
-    // Sadece o harfe ait butonu tekrar aktif yap
     const el = document.getElementById(`btn-${lastItem.index}`);
     if (el) {
         el.classList.remove('disabled');
@@ -167,9 +208,6 @@ function submitWord() {
         
         showMessage('Tekrar dene, başarabilirsin! 💪');
         speakText('Aaaaaa');
-        
-        // Yanlışta isterse hepsi sıfırlanabilir veya kullanıcı kaldığı yerden düzeltebilir. 
-        // Burada teker teker silme olduğu için kullanıcı yanlış yaptığında sil tuşuyla düzeltebilir.
     }
 }
 
@@ -183,6 +221,7 @@ function showMessage(msg) {
     }
 }
 
+/* --- KADIN SESİ DESTEĞİ --- */
 function speakText(text) {
     if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
