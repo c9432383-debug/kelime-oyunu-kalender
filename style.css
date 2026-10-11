@@ -112,21 +112,24 @@ h1 {
     letter-spacing: 2px;
 }
 
+/* KELİMENİN TEK SIRADA KALMASINI SAĞLAYAN GÜNCEL ALAN */
 .word-display {
-    font-size: 2.2rem;
+    font-size: 1.7rem;
     font-weight: bold;
-    letter-spacing: 8px;
+    letter-spacing: 5px;
     text-align: center;
     margin: 12px 0;
     color: #2563eb;
     min-height: 55px;
     background: #eff6ff;
-    padding: 8px;
+    padding: 8px 12px;
     border-radius: 16px;
     border: 2px solid #bfdbfe;
     display: flex;
     align-items: center;
     justify-content: center;
+    white-space: nowrap; /* Alt alta kaymayı kesin olarak engeller */
+    overflow-x: auto;   /* Uzun kelimelerde taşmayı önleyip tek sırada tutar */
 }
 
 .letters-container {
